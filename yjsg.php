@@ -1059,22 +1059,39 @@ class plgSystemYjsg extends JPlugin {
 				$document->addScript(JURI::root( true ).'/plugins/system/yjsg/assets/src/libraries/jquery-noconflict.js');
 			}
 			
-			$language = JFactory::getLanguage();
-			$language->load('tpl_'.Yjsg::getDefaultTemplate(), JPATH_SITE);
-			$user = JFactory::getUser();
-
 			$yjsg_shortcodejs="var jstr_shortcodes_title='".JText::_('YJSG_SHORTCODES_TITLE')."';".PHP_EOL;
-			$plg_shortcodes=json_decode(file_get_contents(JPATH_PLUGINS . YJDS . 'system' . YJDS . 'yjsg' . YJDS . 'includes' . YJDS .'yjsgshortcodes' . YJDS .'shortcodes.json'));
-			$tpl_shortcodes=json_decode(file_get_contents(JPATH_ROOT . YJDS . 'templates' . YJDS . Yjsg::getDefaultTemplate() . YJDS . 'custom' . YJDS .'yjsgshortcodes' . YJDS .'shortcodes.json'));
-			$all_shortcodes = (object) array_merge((array) $plg_shortcodes, (array) $tpl_shortcodes);
-			foreach ($all_shortcodes as $nshortcode)
+			$realshortcodes=array();
+			
+			// Yjsg shortcodes from plugin
+			$realshortcodes['plg']=json_decode(file_get_contents(JPATH_PLUGINS.YJDS.'system'.YJDS.'yjsg'.YJDS.'includes'.YJDS.'yjsgshortcodes'.YJDS.'shortcodes.json'));
+			foreach ($realshortcodes['plg'] as $nshortcode)
 			{
-				$nshortcode->name=JText::_('YJSG_SHORTCODES_'.strtoupper($nshortcode->id).'_NAME');
+				if (JText::_($nshortcode->name)!=$nshortcode->name) $nshortcode->name=JText::_($nshortcode->name);
 			}
-			$yjsg_shortcodejs.="\t\t\t"."var yjsgshortcodesitems = '".json_encode($all_shortcodes)."';".PHP_EOL;
+			$yjsg_shortcodejs.="\t\t\t"."var yjsg_shortcodes_plg='".json_encode($realshortcodes['plg'])."';".PHP_EOL;
+			$document->addScript(JURI::root( true ).'/plugins/system/yjsg/elements/src/yjsgshortcodes.js');	
+			
+			// Yjsg custom shortcodes from template
+			if (JFolder::exists( YJSGCUSTOMFOLDER .'yjsgshortcodes'. YJDS ))
+			{
+				// If shortcodes in template dir and is in admin site load site template language files
+				if(!$this->app->isSite())
+				{
+					$language = JFactory::getLanguage();
+					$language->load('tpl_'.Yjsg::getDefaultTemplate(), JPATH_SITE);
+				}
+				
+				$realshortcodes['tpl']=json_decode(file_get_contents(YJSGCUSTOMFOLDER.'yjsgshortcodes'.YJDS.'shortcodes.json'));
+				foreach ($realshortcodes['tpl'] as $nshortcode)
+				{
+					if (JText::_($nshortcode->name)!=$nshortcode->name) $nshortcode->name=JText::_($nshortcode->name);
+				}
+				$yjsg_shortcodejs.="\t\t\t"."var yjsg_shortcodes_tpl='".json_encode($realshortcodes['tpl'])."';".PHP_EOL;
+				$document->addScript(JURI::root( true ).'/templates/'. Yjsg::getDefaultTemplate() .'/custom/yjsgshortcodes/src/yjsgshortcodes.js');
+			}
+			
 			$document->addScriptDeclaration($yjsg_shortcodejs);
 
-			$document->addScript(JURI::root( true ).'/plugins/system/yjsg/elements/src/yjsgshortcodes.js');	
 				
 			$document->addStylesheet(JURI::root( true ).'/plugins/system/yjsg/elements/css/yjsgshortcodes.css');	
 			

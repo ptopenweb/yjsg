@@ -1,44 +1,44 @@
 [
 	{
 		"id": "accordions",
+		"name": "YJSG_SHORTCODES_ACCORDIONS_NAME",
 		"icon": "fa-list",
 		"x": 770,
-		"y": 350,
-		"type": "plugin"
+		"y": 350
 	},
 	{
 		"id": "icons",
+		"name": "YJSG_SHORTCODES_ICONS_NAME",
 		"icon": "fa-star",
 		"x": 770,
-		"y": 500,
-		"type": "plugin"
+		"y": 500
 	},
 	{
 		"id": "images",
+		"name": "YJSG_SHORTCODES_IMAGES_NAME",
 		"icon": "fa-camera",
 		"x": 770,
-		"y": 600,
-		"type": "plugin"
+		"y": 600
 	},
 	{
 		"id": "media",
+		"name": "YJSG_SHORTCODES_MEDIA_NAME",
 		"icon": "fa-play",
 		"x": 770,
-		"y": 420,
-		"type": "plugin"
+		"y": 420
 	},
 	{
 		"id": "notifications",
+		"name": "YJSG_SHORTCODES_NOTIFICATIONS_NAME",
 		"icon": "fa-bullhorn",
 		"x": 770,
-		"y": 630,
-		"type": "plugin"
+		"y": 630
 	},
 	{
 		"id": "tabs",
+		"name": "YJSG_SHORTCODES_TABS_NAME",
 		"icon": "fa-folder-o",
 		"x": 770,
-		"y": 420,
-		"type": "plugin"
+		"y": 420
 	}
 ]
